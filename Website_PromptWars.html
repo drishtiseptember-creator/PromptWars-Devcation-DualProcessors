@@ -110,6 +110,27 @@ section { padding:100px 20px; }
 
 /* 🔍 TEAM MODAL EXTRA */
 #teamModal { backdrop-filter: blur(10px); }
+
+/* 🏎️ TIMELINE RACE EFFECT */
+.timeline-track {
+    position:absolute;
+    left:50%;
+    transform:translateX(-50%);
+    width:4px;
+    height:100%;
+    background:linear-gradient(to bottom,#00E5FF,#8A2BE2,#FF2E9F);
+}
+
+.timeline-car {
+    position:absolute;
+    left:50%;
+    transform:translate(-50%,0);
+    width:20px;
+    height:20px;
+    border-radius:50%;
+    background:#00E5FF;
+    box-shadow:0 0 15px #00E5FF, 0 0 30px #8A2BE2;
+}
 </style>
 </head>
 
@@ -202,7 +223,9 @@ class="w-[450px] hover:scale-110 transition drop-shadow-[0_0_40px_#8A2BE2]">
 <a href="#" class="bg-green-400 text-black px-6 py-3 rounded-lg font-bold">
 Register Now
 </a>
+
 </div>
+
 </section>
 <!-- 🔥 NEW: FULL DETAILS SECTION -->
 <section id="details">
@@ -523,6 +546,191 @@ notif.classList.add("hidden");
 /* INIT */
 render(users);
 </script>
+<style>
+/* ✨ EXTRA EFFECTS (NO CHANGE TO EXISTING) */
 
+.spark {
+    position: fixed;
+    width: 6px;
+    height: 6px;
+    background: #00E5FF;
+    border-radius: 50%;
+    pointer-events: none;
+    animation: sparkAnim 0.6s linear forwards;
+}
+
+@keyframes sparkAnim {
+    to {
+        transform: translateY(-40px) scale(0);
+        opacity: 0;
+    }
+}
+
+.coin {
+    position: fixed;
+    font-size: 18px;
+    animation: coinFly 1s ease-out forwards;
+    pointer-events: none;
+}
+
+@keyframes coinFly {
+    to {
+        transform: translateY(-120px) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+.glass-card:hover {
+    animation: glowPulse 1.2s infinite alternate;
+}
+
+@keyframes glowPulse {
+    from { box-shadow: 0 0 20px #8A2BE2; }
+    to { box-shadow: 0 0 50px #FF2E9F; }
+}
+</style>
+
+<script>
+/* 🏎️ TIMELINE AUTO-INJECT (NO HTML CHANGE) */
+(function(){
+    const timeline = document.querySelector("#timeline .space-y-4");
+    if(!timeline) return;
+
+    const track = document.createElement("div");
+    track.className = "timeline-track";
+
+    const car = document.createElement("div");
+    car.className = "timeline-car";
+
+    timeline.style.position = "relative";
+    timeline.appendChild(track);
+    timeline.appendChild(car);
+
+    window.addEventListener("scroll", () => {
+        const rect = timeline.getBoundingClientRect();
+        const progress = Math.min(Math.max((window.innerHeight - rect.top) / rect.height, 0), 1);
+        car.style.top = (progress * timeline.offsetHeight) + "px";
+    });
+    
+})();
+
+/* 💰 COIN BURST ON PRIZE CLICK */
+document.addEventListener("click", function(e){
+    if(e.target.closest("#prizes")){
+        for(let i=0;i<15;i++){
+            let coin = document.createElement("div");
+            coin.className="coin";
+            coin.innerText="💰";
+
+            coin.style.left = e.clientX + "px";
+            coin.style.top = e.clientY + "px";
+
+            document.body.appendChild(coin);
+
+            setTimeout(()=>coin.remove(),1000);
+        }
+    }
+});
+
+/* ✨ CLICK SPARK EFFECT */
+document.addEventListener("click", function(e){
+    for(let i=0;i<6;i++){
+        let spark = document.createElement("div");
+        spark.className="spark";
+
+        spark.style.left = e.clientX + "px";
+        spark.style.top = e.clientY + "px";
+
+        document.body.appendChild(spark);
+
+        setTimeout(()=>spark.remove(),600);
+    }
+});
+</script>
+<style>
+/* 🔧 COMPACT SPACING (NO CONTENT CHANGE) */
+
+/* reduce section padding */
+section {
+    padding: 70px 20px !important;
+}
+
+/* reduce large gaps */
+.gap-16 {
+    gap: 3rem !important;
+}
+
+/* reduce grid gaps */
+.gap-6 {
+    gap: 1.2rem !important;
+}
+
+/* tighten vertical stacks */
+.space-y-4 > * + * {
+    margin-top: 0.8rem !important;
+}
+
+/* reduce card padding slightly */
+.glass-card {
+    padding: 1.5rem !important;
+}
+
+/* headings closer */
+h2 {
+    margin-bottom: 1.5rem !important;
+}
+
+/* reduce top spacing in hero */
+.pt-32 {
+    padding-top: 6rem !important;
+}
+
+/* slightly tighter containers */
+.container {
+    max-width: 1100px !important;
+}
+</style>
+</script>
+
+<!-- ✅ PASTE HERE -->
+<script>
+/* 🏎️ FIXED TIMELINE (NO GLITCH) */
+(function () {
+    const timeline = document.querySelector("#timeline .space-y-4");
+    if (!timeline) return;
+
+    if (timeline.querySelector(".timeline-track")) return;
+
+    const track = document.createElement("div");
+    track.className = "timeline-track";
+
+    const car = document.createElement("div");
+    car.className = "timeline-car";
+
+    timeline.style.position = "relative";
+    timeline.appendChild(track);
+    timeline.appendChild(car);
+
+    let current = 0;
+
+    function animate() {
+        const rect = timeline.getBoundingClientRect();
+
+        let target = (window.innerHeight - rect.top) / rect.height;
+        target = Math.max(0, Math.min(1, target));
+
+        current += (target - current) * 0.1;
+
+        car.style.top = (current * timeline.offsetHeight) + "px";
+
+        requestAnimationFrame(animate);
+    }
+
+    animate();
+})();
+</script>
+
+</body>
+</html>
 </body>
 </html>
